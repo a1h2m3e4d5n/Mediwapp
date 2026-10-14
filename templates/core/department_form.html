@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block title %}إضافة قسم — MediWapp{% endblock %}
+{% block heading %}إضافة قسم جديد{% endblock %}
+{% block content %}<div class="form-layout"><div class="panel-card form-card"><div class="form-intro"><div class="form-icon teal-bg"><i class="bi bi-hospital"></i></div><div><h3>بيانات القسم</h3><p>سيظهر القسم النشط مباشرة في نموذج تسجيل المرضى.</p></div></div><form method="post">{% csrf_token %}{{ form.as_p }}<div class="form-actions"><a href="{% url 'settings' %}" class="btn btn-light">إلغاء</a><button class="btn btn-brand"><i class="bi bi-check2"></i> حفظ القسم</button></div></form></div></div>{% endblock %}

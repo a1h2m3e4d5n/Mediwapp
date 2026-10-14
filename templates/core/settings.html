@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}الإعدادات — MediWapp{% endblock %}
+{% block heading %}الإعدادات والتكامل{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-xl-7">
+    <div class="panel-card">
+      <div class="panel-head">
+        <div><span class="section-kicker">القنوات</span><h3>Meta WhatsApp Business Cloud API</h3></div>
+        <span class="badge-soft {% if whatsapp_enabled and token_configured and phone_id_configured %}success{% else %}warning{% endif %}">{% if whatsapp_enabled and token_configured and phone_id_configured %}مفعّل{% else %}وضع تجريبي{% endif %}</span>
+      </div>
+      <div class="setting-list">
+        <div><span>الاتصال الفعلي</span><strong>{% if whatsapp_enabled %}مفعّل{% else %}متوقف — محاكاة{% endif %}</strong></div>
+        <div><span>معرف رقم الهاتف</span><strong>{% if phone_id_configured %}مضبوط{% else %}غير مضبوط{% endif %}</strong></div>
+        <div><span>رمز Meta</span><strong>{% if token_configured %}محفوظ خارج الواجهة{% else %}غير مضبوط{% endif %}</strong></div>
+        <div><span>رابط PDF العام</span><strong>{% if public_url_configured %}مضبوط{% else %}غير مضبوط{% endif %}</strong></div>
+        <div><span>SMS</span><strong class="text-muted">متوقف حالياً</strong></div>
+      </div>
+      <div class="info-callout"><i class="bi bi-info-circle"></i><p>للتشغيل الفعلي، اضبط القوالب المعتمدة أيضاً: <span dir="ltr">WHATSAPP_WELCOME_TEMPLATE</span> و<span dir="ltr">WHATSAPP_EXAM_TEMPLATE</span> و<span dir="ltr">WHATSAPP_TEMPLATE_LANGUAGE</span>.</p></div>
+    </div>
+  </div>
+  <div class="col-xl-5">
+    <div class="panel-card">
+      <div class="panel-head"><div><span class="section-kicker">إدارة البيانات</span><h3>الأقسام</h3></div><a href="{% url 'department_create' %}" class="btn btn-sm btn-outline-brand"><i class="bi bi-plus"></i> قسم</a></div>
+      <p class="page-lead">الأقسام النشطة تظهر في نموذج تسجيل المريض.</p>
+      <div class="department-list">
+        {% for department in departments %}
+          <div class="delivery-card">
+            <div class="message-icon"><i class="bi bi-hospital"></i></div>
+            <div class="flex-grow-1"><strong>{{ department.name }}</strong><span>{% if department.is_active %}نشط ويظهر في النماذج{% else %}متوقف ولا يظهر في النماذج{% endif %}</span></div>
+            <span class="badge-soft {% if department.is_active %}success{% else %}warning{% endif %}">{% if department.is_active %}نشط{% else %}متوقف{% endif %}</span>
+          </div>
+        {% empty %}
+          <div class="empty-state">لا توجد أقسام. يمكنك إضافة أول قسم من الزر أعلاه.</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

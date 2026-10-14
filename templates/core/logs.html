@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}سجل الرسائل — MediWapp{% endblock %}
+{% block heading %}سجل الرسائل والإرسال{% endblock %}
+{% block content %}
+<div class="page-actions"><p class="page-lead">تتبع كل رسالة ترحيب وكل ملف فحص مع إمكانية إعادة المحاولة.</p><div class="mini-status"><span class="status-dot"></span> SMS متوقف</div></div>
+<div class="panel-card"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>التاريخ</th><th>المريض</th><th>النوع</th><th>القناة</th><th>الحالة</th><th>الملاحظات</th><th></th></tr></thead><tbody>{% for log in logs %}<tr><td>{{ log.created_at|date:'Y-m-d H:i' }}</td><td><a class="item-link" href="{% url 'patient_detail' log.patient.pk %}">{{ log.patient.full_name }}</a><small dir="ltr">{{ log.recipient }}</small></td><td>{{ log.get_message_type_display }}</td><td><span class="channel-pill"><i class="bi bi-whatsapp"></i> WhatsApp</span></td><td><span class="badge-soft {{ log.status }}">{{ log.get_status_display }}</span></td><td class="log-error">{{ log.error_message|default:'—' }}</td><td><form method="post" action="{% url 'resend_message' log.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'message_logs' %}"><button class="icon-btn" title="إعادة الإرسال"><i class="bi bi-arrow-clockwise"></i></button></form></td></tr>{% empty %}<tr><td colspan="7" class="empty-state">لا يوجد سجل رسائل.</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}
