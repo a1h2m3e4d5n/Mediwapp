@@ -9,8 +9,7 @@ load_dotenv(BASE_DIR / '.env')
 ENVIRONMENT = os.getenv("DJANGO_ENV", "local").lower()
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'demo-only-change-me-in-production')
 DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
-ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '*').split(',') if h.strip()]
-
+ALLOWED_HOSTS = ['iwapp.onrender.com', 'mediwapp.onrender.com', 'localhost', '127.0.0.1']
 INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
     'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles',
