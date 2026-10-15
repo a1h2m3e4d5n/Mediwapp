@@ -11,6 +11,10 @@ from .models import ActivityLog, Department, Exam, MessageLog, Patient, Visit
 from .services.pdf import generate_exam_pdf
 from .services.whatsapp import send_exam_document, send_welcome
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import SMSQueue
+
 
 def log_activity(action, description):
     ActivityLog.objects.create(action=action, description=description)
@@ -145,3 +149,28 @@ def department_settings(request):
         messages.success(request, 'تمت إضافة القسم بنجاح.')
         return redirect('settings')
     return render(request, 'core/department_form.html', {'form': form})
+
+
+
+# ----------- أضف هذا الكود في نهاية الملف -----------
+def get_pending_sms(request):
+    sms = SMSQueue.objects.filter(is_sent=False).first()
+    if sms:
+        return JsonResponse({
+            'id': sms.id,
+            'phone': sms.phone_number,
+            'message': sms.message
+        })
+    return JsonResponse({'message': 'No pending SMS'}, status=404)
+
+@csrf_exempt
+def mark_sms_sent(request, sms_id):
+    if request.method == 'POST':
+        try:
+            sms = SMSQueue.objects.get(id=sms_id)
+            sms.is_sent = True
+            sms.save()
+            return JsonResponse({'status': 'success'})
+        except SMSQueue.DoesNotExist:
+            return JsonResponse({'status': 'error'}, status=404)
+    return JsonResponse({'status': 'invalid method'}, status=400)

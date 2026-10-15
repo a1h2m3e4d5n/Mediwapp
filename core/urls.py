@@ -14,4 +14,7 @@ urlpatterns = [
     path('messages/<int:pk>/resend/', views.resend_message, name='resend_message'),
     path('settings/', views.settings_page, name='settings'),
     path('settings/departments/new/', views.department_settings, name='department_create'),
+    # أضف هذه الأسطر داخل قائمة urlpatterns
+    path('api/pending-sms/', views.get_pending_sms, name='pending-sms'),
+    path('api/sms-sent/<int:sms_id>/', views.mark_sms_sent, name='sms-sent'),
 ]

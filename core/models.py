@@ -1,5 +1,8 @@
 from django.db import models
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 class Department(models.Model):
@@ -106,3 +109,30 @@ class ActivityLog(models.Model):
         ordering = ['-created_at']
         verbose_name = 'سجل عملية'
         verbose_name_plural = 'سجل العمليات'
+
+
+
+
+# ----------- أضف هذا الكود في نهاية الملف -----------
+class SMSQueue(models.Model):
+    phone_number = models.CharField(max_length=20, verbose_name="رقم الهاتف")
+    message = models.TextField(verbose_name="نص الرسالة")
+    is_sent = models.BooleanField(default=False, verbose_name="تم الإرسال؟")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.phone_number} - {'تم' if self.is_sent else 'في الانتظار'}"
+
+# يتم استدعاء هذا الحدث تلقائياً عند إضافة مريض جديد
+# (تأكد أن اسم نموذج المريض لديك هو Patient وحقل الهاتف هو phone)
+@receiver(post_save, sender='core.Patient')
+def create_welcome_sms(sender, instance, created, **kwargs):
+    if created:
+        # جلب رقم الهاتف (يدعم إذا كان اسم الحقل phone أو phone_number)
+        phone = getattr(instance, 'phone', None) or getattr(instance, 'phone_number', None)
+        if phone:
+            welcome_text = f"أهلاً بك {instance.name} في عيادتنا. نتمنى لك دوام الصحة والعافية."
+            SMSQueue.objects.create(
+                phone_number=phone,
+                message=welcome_text
+            )
