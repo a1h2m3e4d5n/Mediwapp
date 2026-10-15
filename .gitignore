@@ -3,9 +3,10 @@ __pycache__/
 *.sqlite3
 .env
 .env.*
-!.env
+!.env.example
 media/
 staticfiles/
 .venv/
 venv/
 .DS_Store
+
