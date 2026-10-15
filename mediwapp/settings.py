@@ -43,11 +43,11 @@ if DB_ENGINE in {"postgres", "postgresql"}:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.environ.get("DB_NAME", "store_db"),
-            "USER": os.environ.get("DB_USER", "store_user"),
+            "NAME": os.environ.get("DB_NAME", ""),
+            "USER": os.environ.get("DB_USER", ""),
             "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-            "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-            "PORT": os.getenv("DB_PORT", "5432"),
+            "HOST": os.getenv("DB_HOST", ""),
+            "PORT": os.getenv("DB_PORT", ""),
         }
     }
 elif DB_ENGINE in {"mssql", "sqlserver"}:
