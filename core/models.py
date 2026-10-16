@@ -131,7 +131,8 @@ def create_welcome_sms(sender, instance, created, **kwargs):
         # جلب رقم الهاتف (يدعم إذا كان اسم الحقل phone أو phone_number)
         phone = getattr(instance, 'phone', None) or getattr(instance, 'phone_number', None)
         if phone:
-            welcome_text = f"أهلاً بك {instance.name} في عيادتنا. نتمنى لك دوام الصحة والعافية."
+            patient_name = instance.full_name
+            welcome_text = f"أهلاً بك {patient_name} في عيادتنا. نتمنى لك دوام الصحة والعافية."
             SMSQueue.objects.create(
                 phone_number=phone,
                 message=welcome_text
